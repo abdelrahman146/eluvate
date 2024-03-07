@@ -1,0 +1,36 @@
+{
+  "name": "elavata",
+  "version": "1.0.0",
+  "main": "index.js",
+  "private": true,
+  "scripts": {
+    "gen:init": "yarn ts-node lib/cmd/init.ts",
+    "gen:schema": "yarn ts-node lib/cmd/gen-schema.ts",
+    "gen:server": "yarn ts-node lib/cmd/gen-server.ts",
+    "dev:server": "ts-node server/www.ts",
+    "prisma:seed": "ts-node prisma/seed.ts",
+    "prisma:reset": "yarn prisma migrate reset",
+    "format": "prettier --write \"./**/*.+(ts|tsx)\""
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.3.1",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.6",
+    "@types/debug": "^4.1.12",
+    "@types/express": "^4.17.21",
+    "@types/morgan": "^1.9.9",
+    "@types/node": "^20.11.5",
+    "prettier": "^3.2.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@prisma/client": "5.8.1",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.6",
+    "express": "^4.18.2",
+    "morgan": "^1.10.0",
+    "prisma": "^5.8.1",
+    "react-admin": "^4.16.7"
+  }
+}

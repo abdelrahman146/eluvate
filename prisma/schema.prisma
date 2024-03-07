@@ -1,0 +1,100 @@
+datasource db {
+  provider = "postgres"
+  url      = "postgres://admin:1234@localhost:5432/app"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum AuthProvider {
+  LOCAL
+  GOOGLE
+}
+
+model user {
+  id                 Int          @id @default(autoincrement())
+  email              String       @unique
+  email_verified     Boolean      @default(false)
+  password           String
+  provider           AuthProvider @default(LOCAL)
+  first_name         String
+  last_name          String
+  avatar_url         String?
+  forgot_password_id String?
+  role               role         @relation(fields: [roleId], references: [id])
+  roleId             String
+  history            history[]
+
+  deleted    Boolean? @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model role {
+  id   String @id
+  name String
+
+  create_client Boolean @default(true)
+  read_client   Boolean @default(true)
+  update_client Boolean @default(true)
+  delete_client Boolean @default(true)
+
+  create_invoice Boolean @default(true)
+  read_invoice   Boolean @default(true)
+  update_invoice Boolean @default(true)
+  delete_invoice Boolean @default(true)
+
+  create_project Boolean @default(true)
+  read_project   Boolean @default(true)
+  update_project Boolean @default(true)
+  delete_project Boolean @default(true)
+
+  user user[]
+
+  deleted    Boolean? @default(false)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+}
+
+model history {
+  id         BigInt   @id @default(autoincrement())
+  activity   String
+  user       user     @relation(fields: [userId], references: [id])
+  userId     Int
+  entity     String
+  rowId      Int
+  created_at DateTime @default(now())
+}
+
+model client {
+  id           Int       @id
+  client_name  String    @unique
+  contact_info String?   @default("Not provided")
+  projects     project[]
+  deleted      Boolean?  @default(false)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+}
+
+model invoice {
+  id             Int      @id
+  invoice_number String   @unique
+  amount_due     Float    @default(0)
+  project        project  @relation(fields: [projectId], references: [id])
+  projectId      Int
+  deleted        Boolean? @default(false)
+  created_at     DateTime @default(now())
+  updated_at     DateTime @updatedAt
+}
+
+model project {
+  id           Int       @id
+  project_name String    @unique @default("new project")
+  client       client    @relation(fields: [clientId], references: [id])
+  clientId     Int
+  invoices     invoice[]
+  deleted      Boolean?  @default(false)
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+}
